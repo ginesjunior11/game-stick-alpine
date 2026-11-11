@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game Stick Alpine — preview</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;600&display=block" rel="stylesheet">
+<style>
+  html,body { margin:0; background:#F1ECE0; }
+  svg { display:block; }
+  .t { font-family:'Barlow Condensed', sans-serif; fill:#1D1C1A; }
+  .m { font-family:'IBM Plex Mono', monospace; fill:#1D1C1A; white-space:pre; }
+  .s { fill:#6F6A60; }
+  .a { fill:#E2531F; }
+  .ln { stroke:#1D1C1A; fill:none; stroke-width:2; }
+  .thin { stroke:#1D1C1A; fill:none; stroke-width:1.2; }
+</style>
+</head>
+<body>
+<svg width="1280" height="640" viewBox="0 0 1280 640" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="hatchA" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+    <line x1="0" y1="0" x2="0" y2="7" stroke="#E2531F" stroke-width="1.2" opacity=".7"/>
+  </pattern>
+</defs>
+<!-- marco -->
+<rect x="14" y="14" width="1252" height="612" class="ln" stroke-width="2.5"/>
+<rect x="32" y="32" width="1216" height="576" class="thin"/>
+
+<!-- texto -->
+<text x="64" y="96" class="m s" font-size="15" letter-spacing="2.5">SECOND-LIFE CONVERSION · DWG GSA-01</text>
+<text x="60" y="186" class="t" font-size="96" font-weight="700" letter-spacing="1">GAME STICK</text>
+<text x="60" y="272" class="t" font-size="96" font-weight="700" letter-spacing="1">ALPINE</text>
+<line x1="64" y1="300" x2="470" y2="300" class="ln" stroke="#E2531F" stroke-width="3"/>
+<g class="m" font-size="18">
+  <text x="64" y="340">Got a retro game stick?</text>
+  <text x="64" y="366">Don't throw it away: make it a</text>
+  <text x="64" y="392">tiny Linux server for your home.</text>
+</g>
+<g class="m" font-size="14.5">
+  <text x="64" y="446"><tspan class="a" font-weight="600">■</tspan>  dashboard, family calendar, photos</text>
+  <text x="64" y="472"><tspan class="a" font-weight="600">■</tspan>  alerts and control from Home Assistant</text>
+  <text x="64" y="498"><tspan class="a" font-weight="600">■</tspan>  shared folder + Tailscale</text>
+  <text x="64" y="524"><tspan class="a" font-weight="600">■</tspan>  step-by-step AI prompts, no code</text>
+</g>
+<text x="64" y="584" class="m s" font-size="14">github.com/ginesjunior11/game-stick-alpine</text>
+
+<!-- tele con el dashboard -->
+<rect x="540" y="78" width="664" height="384" rx="6" class="ln" stroke-width="3"/>
+<svg x="554" y="92" width="636" height="358" viewBox="160 150 1280 720" preserveAspectRatio="xMidYMid slice"><image href="dashboard.png" x="0" y="0" width="1600" height="1000"/></svg>
+<rect x="554" y="92" width="636" height="358" class="thin"/>
+<path d="M700 462 L688 486 H784 L772 462" class="ln"/>
+<text x="736" y="508" class="m" font-size="13" font-weight="600" text-anchor="middle">TV · HDMI 3</text>
+
+<!-- calendario superpuesto -->
+<rect x="904" y="336" width="320" height="196" fill="#F1ECE0" stroke="#1D1C1A" stroke-width="2.5"/>
+<svg x="912" y="344" width="304" height="171" viewBox="160 150 1280 720" preserveAspectRatio="xMidYMid slice"><image href="calendar-christmas.png" x="0" y="0" width="1600" height="1000"/></svg>
+<rect x="912" y="344" width="304" height="171" class="thin"/>
+<text x="912" y="550" class="m s" font-size="12" letter-spacing="1">OR: CALENDAR · PHOTOS</text>
+
+<!-- stick y tarjeta -->
+<g transform="translate(560 528)">
+  <rect x="0" y="0" width="170" height="46" rx="10" class="ln" stroke-width="2.5"/>
+  <rect x="-24" y="12" width="24" height="22" class="ln" fill="#E7E0D0"/>
+  <text x="85" y="29" class="m" font-size="13" font-weight="600" text-anchor="middle">GAME STICK</text>
+  <path d="M120 46 h36 v26 h-46 v-18 z" fill="url(#hatchA)" stroke="#E2531F" stroke-width="2"/>
+  <text x="164" y="64" class="m a" font-size="12" font-weight="600">microSD</text>
+</g>
+<path d="M536 551 H500 V440 H540" class="thin" stroke-dasharray="5 4"/>
+
+<!-- sello -->
+<g transform="translate(990 44) rotate(-2)">
+  <rect x="0" y="0" width="190" height="36" fill="#F1ECE0" stroke="#E2531F" stroke-width="2.5"/>
+  <text x="95" y="25" class="t a" font-size="21" font-weight="700" text-anchor="middle" letter-spacing="1.5">NO HARDWARE MODIFIED</text>
+</g>
+</svg>
+</body>
+</html>

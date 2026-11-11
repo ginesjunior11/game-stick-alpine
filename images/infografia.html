@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Game Stick con ESP32 — sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=block" rel="stylesheet">
+<style>
+  :root { --paper:#F1ECE0; --ink:#1D1C1A; --soft:#6F6A60; --line:#1D1C1A; --acc:#E2531F; --wash:#E7E0D0; }
+  html,body { margin:0; background:var(--paper); }
+  svg { display:block; }
+  .t  { font-family:'Barlow Condensed', sans-serif; fill:var(--ink); }
+  .m  { white-space:pre; font-family:'IBM Plex Mono', monospace; fill:var(--ink); }
+  .s  { fill:var(--soft); }
+  .a  { fill:var(--acc); }
+  .ln { stroke:var(--line); fill:none; stroke-width:2; }
+  .thin { stroke:var(--line); fill:none; stroke-width:1.2; }
+  .dash { stroke:var(--line); fill:none; stroke-width:1.5; stroke-dasharray:7 5; }
+  .acc { stroke:var(--acc); fill:none; stroke-width:2.5; }
+  .ball { fill:var(--paper); stroke:var(--ink); stroke-width:2; }
+  .balla { fill:var(--acc); stroke:var(--acc); stroke-width:2; }
+</style>
+</head>
+<body>
+<svg width="1600" height="2100" viewBox="0 0 1600 2100" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <pattern id="hatch" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+    <line x1="0" y1="0" x2="0" y2="9" stroke="#1D1C1A" stroke-width="1.1" opacity=".55"/>
+  </pattern>
+  <pattern id="hatchA" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">
+    <line x1="0" y1="0" x2="0" y2="8" stroke="#E2531F" stroke-width="1.3" opacity=".7"/>
+  </pattern>
+  <pattern id="dots" width="10" height="10" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="0.9" fill="#1D1C1A" opacity=".35"/>
+  </pattern>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+    <path d="M0 1 L10 5 L0 9 z" fill="#1D1C1A"/>
+  </marker>
+  <marker id="arrA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+    <path d="M0 1 L10 5 L0 9 z" fill="#E2531F"/>
+  </marker>
+  <marker id="dot" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7">
+    <circle cx="5" cy="5" r="4" fill="#1D1C1A"/>
+  </marker>
+  <!-- tarjeta microSD (150 x 200) -->
+  <path id="sd" d="M0 0 H105 L150 45 V200 H0 Z"/>
+</defs>
+
+<!-- ===================== MARCO DE LAMINA ===================== -->
+<rect x="18" y="18" width="1564" height="2064" class="ln" stroke-width="3"/>
+<rect x="46" y="46" width="1508" height="2008" class="ln"/>
+<g class="m s" font-size="13" text-anchor="middle">
+  <!-- zonas 1..8 arriba y abajo, A..F a los lados -->
+  <g id="zonas">
+    <text x="140" y="38">1</text><text x="330" y="38">2</text><text x="520" y="38">3</text><text x="710" y="38">4</text>
+    <text x="900" y="38">5</text><text x="1090" y="38">6</text><text x="1280" y="38">7</text><text x="1460" y="38">8</text>
+  </g>
+  <use href="#zonas" y="2036"/>
+  <text x="32" y="200">A</text><text x="32" y="550">B</text><text x="32" y="900">C</text><text x="32" y="1250">D</text><text x="32" y="1600">E</text><text x="32" y="1950">F</text>
+  <text x="1568" y="200">A</text><text x="1568" y="550">B</text><text x="1568" y="900">C</text><text x="1568" y="1250">D</text><text x="1568" y="1600">E</text><text x="1568" y="1950">F</text>
+</g>
+<g class="thin">
+  <path d="M235 18 V46 M425 18 V46 M615 18 V46 M805 18 V46 M995 18 V46 M1185 18 V46 M1375 18 V46"/>
+  <path d="M235 2054 V2082 M425 2054 V2082 M615 2054 V2082 M805 2054 V2082 M995 2054 V2082 M1185 2054 V2082 M1375 2054 V2082"/>
+  <path d="M18 375 H46 M18 725 H46 M18 1075 H46 M18 1425 H46 M18 1775 H46"/>
+  <path d="M1554 375 H1582 M1554 725 H1582 M1554 1075 H1582 M1554 1425 H1582 M1554 1775 H1582"/>
+</g>
+
+<!-- ===================== CABECERA ===================== -->
+<text x="86" y="128" class="m s" font-size="17" letter-spacing="3">SECOND-LIFE CONVERSION · RETRO GAME STICK → HOME PANEL</text>
+<text x="80" y="222" class="t" font-size="112" font-weight="700" letter-spacing="1">GAME STICK CON ESP32</text>
+<text x="86" y="270" class="m" font-size="21">A ~US$20 retro game stick that now runs <tspan font-weight="600">Alpine Linux</tspan>, joins my <tspan font-weight="600">Tailscale</tspan> network,</text>
+<text x="86" y="300" class="m" font-size="21">is a <tspan font-weight="600">Home Assistant</tspan> device over MQTT and draws a dashboard or calendar on the TV.</text>
+
+<!-- sello -->
+<g transform="translate(1262 92) rotate(4)">
+  <rect x="0" y="0" width="250" height="150" fill="none" stroke="#E2531F" stroke-width="3"/>
+  <rect x="7" y="7" width="236" height="136" fill="none" stroke="#E2531F" stroke-width="1.2"/>
+  <text x="125" y="52" class="t a" font-size="34" font-weight="700" text-anchor="middle" letter-spacing="2">NO HARDWARE</text>
+  <text x="125" y="90" class="t a" font-size="34" font-weight="700" text-anchor="middle" letter-spacing="2">MODIFIED</text>
+  <text x="125" y="124" class="m a" font-size="12.5" text-anchor="middle">swap the card: console again</text>
+</g>
+<line x1="46" y1="340" x2="1554" y2="340" class="ln"/>
+
+<!-- ===================== FIG 1: EL EQUIPO ===================== -->
+<text x="86" y="384" class="t" font-size="30" font-weight="700" letter-spacing="1">FIG. 1 — THE HARDWARE</text>
+<text x="86" y="410" class="m s" font-size="14">top view, cut-away · schematic, not to scale</text>
+
+<g transform="translate(0 30)">
+  <!-- conector HDMI -->
+  <rect x="150" y="476" width="92" height="74" rx="4" class="ln" fill="#E7E0D0"/>
+  <path d="M164 492 H228 L220 534 H172 Z" class="thin"/>
+  <path d="M176 500 H216" class="thin"/>
+  <!-- cuerpo -->
+  <rect x="242" y="446" width="420" height="134" rx="22" class="ln" stroke-width="2.5" fill="#F1ECE0"/>
+  <rect x="256" y="460" width="392" height="106" rx="14" class="dash" stroke-width="1.2"/>
+  <!-- chip -->
+  <rect x="290" y="474" width="82" height="78" class="ln" fill="url(#dots)"/>
+  <text x="331" y="508" class="m" font-size="14" font-weight="600" text-anchor="middle">MG99</text>
+  <text x="331" y="528" class="m s" font-size="11" text-anchor="middle">sun8iw20</text>
+  <g class="thin"><path d="M290 486 h-8 M290 498 h-8 M290 510 h-8 M290 522 h-8 M290 534 h-8 M290 546 h-8 M372 486 h8 M372 498 h8 M372 510 h8 M372 522 h8 M372 534 h8 M372 546 h8"/></g>
+  <!-- RAM -->
+  <rect x="402" y="482" width="64" height="62" class="ln" fill="url(#hatch)"/>
+  <rect x="412" y="500" width="44" height="24" fill="#F1ECE0"/>
+  <text x="434" y="517" class="m" font-size="12" font-weight="600" text-anchor="middle">DDR3</text>
+  <!-- WiFi de fabrica: no hay -->
+  <!-- puertos en el extremo -->
+  <rect x="662" y="470" width="30" height="44" class="ln" fill="#E7E0D0"/>
+  <rect x="669" y="480" width="16" height="24" class="thin"/>
+  <rect x="662" y="524" width="14" height="30" rx="6" class="ln" fill="#E7E0D0"/>
+  <!-- ranura y tarjeta microSD -->
+  <rect x="512" y="574" width="96" height="10" class="ln" fill="#1D1C1A"/>
+  <g transform="translate(522 584) scale(.5 .34)"><use href="#sd" fill="url(#hatchA)" stroke="#E2531F" stroke-width="5"/></g>
+
+  <!-- globos -->
+  <g class="thin">
+    <path d="M331 474 L300 418"/>
+    <path d="M434 482 L466 418"/>
+    <path d="M196 476 L166 418"/>
+    <path d="M565 652 L560 600"/>
+    <path d="M692 492 L748 450"/>
+    <path d="M676 540 L748 586"/>
+  </g>
+  <circle cx="300" cy="404" r="16" class="ball"/><text x="300" y="410" class="m" font-size="16" font-weight="600" text-anchor="middle">1</text>
+  <circle cx="466" cy="404" r="16" class="ball"/><text x="466" y="410" class="m" font-size="16" font-weight="600" text-anchor="middle">2</text>
+  <circle cx="166" cy="404" r="16" class="ball"/><text x="166" y="410" class="m" font-size="16" font-weight="600" text-anchor="middle">3</text>
+  <circle cx="565" cy="668" r="16" class="balla"/><text x="565" y="674" class="m" font-size="16" font-weight="600" text-anchor="middle" fill="#F1ECE0">4</text>
+  <circle cx="764" cy="440" r="16" class="ball"/><text x="764" y="446" class="m" font-size="16" font-weight="600" text-anchor="middle">5</text>
+  <circle cx="764" cy="596" r="16" class="ball"/><text x="764" y="602" class="m" font-size="16" font-weight="600" text-anchor="middle">6</text>
+</g>
+
+<!-- lista de partes -->
+<g transform="translate(86 728)">
+  <rect x="0" y="0" width="736" height="252" class="ln"/>
+  <line x1="0" y1="32" x2="736" y2="32" class="ln"/>
+  <line x1="52" y1="0" x2="52" y2="252" class="thin"/>
+  <line x1="230" y1="0" x2="230" y2="252" class="thin"/>
+  <text x="26" y="22" class="m" font-size="13" font-weight="600" text-anchor="middle">ITEM</text>
+  <text x="66" y="22" class="m" font-size="13" font-weight="600">PART</text>
+  <text x="244" y="22" class="m" font-size="13" font-weight="600">NOTE</text>
+  <g class="m" font-size="14.5">
+    <text x="26" y="60" text-anchor="middle">1</text><text x="66" y="60">SoC "MG99"</text><text x="244" y="60">Allwinner sun8iw20 (T113 family), 2× Cortex-A7</text>
+    <text x="26" y="96" text-anchor="middle">2</text><text x="66" y="96">RAM</text><text x="244" y="96">256 MB DDR3 · ~160 MB still free with the panel on</text>
+    <text x="26" y="132" text-anchor="middle">3</text><text x="66" y="132">HDMI out</text><text x="244" y="132">1280×720 framebuffer, no text console from factory</text>
+    <text x="26" y="168" text-anchor="middle" class="a" font-weight="600">4</text><text x="66" y="168" class="a" font-weight="600">microSD</text><text x="244" y="168" class="a" font-weight="600">the ONLY storage: OS, apps, config, shared folder</text>
+    <text x="26" y="204" text-anchor="middle">5</text><text x="66" y="204">USB-A</text><text x="244" y="204">network module: ESP32-C6, Wi-Fi dongle or Ethernet</text>
+    <text x="26" y="240" text-anchor="middle">6</text><text x="66" y="240">USB-C</text><text x="244" y="240">5 V in · own charger, always on</text>
+  </g>
+  <g class="thin"><path d="M0 68 H736 M0 104 H736 M0 140 H736 M0 176 H736 M0 212 H736" stroke-dasharray="2 4"/></g>
+</g>
+
+<!-- ===================== FIG 1B: SOFTWARE ===================== -->
+<line x1="866" y1="360" x2="866" y2="1000" class="thin"/>
+<text x="900" y="384" class="t" font-size="30" font-weight="700" letter-spacing="1">FIG. 1B — SOFTWARE, BOTTOM UP</text>
+<text x="900" y="410" class="m s" font-size="14">what boots from the card</text>
+
+<g transform="translate(900 432)" class="m">
+  <!-- codigo propio -->
+  <rect x="0" y="0" width="614" height="214" fill="none" stroke="#E2531F" stroke-width="2.5"/>
+  <rect x="0" y="0" width="150" height="26" fill="#E2531F"/>
+  <text x="10" y="18" font-size="13" font-weight="600" fill="#F1ECE0" letter-spacing="1">WRITTEN FOR IT</text>
+  <g font-size="15">
+    <text x="16" y="52" font-weight="600">terminal</text><text x="170" y="52">on the HDMI framebuffer + layers</text>
+    <text x="16" y="77" font-weight="600">renderer</text><text x="170" y="77">anti-aliased drawing, ~2 % CPU</text>
+    <text x="16" y="102" font-weight="600">dashboard</text><text x="170" y="102">homelab + rooms from Home Assistant</text>
+    <text x="16" y="127" font-weight="600">calendar</text><text x="170" y="127">month, weather, agenda · themes</text>
+    <text x="16" y="152" font-weight="600">photo frame</text><text x="170" y="152">slideshow from the shared folder</text>
+    <text x="16" y="177" font-weight="600">HA device</text><text x="170" y="177">MQTT: sensors, buttons, switches</text>
+    <text x="16" y="202" font-weight="600">alerts</text><text x="170" y="202">ticker, red card, voice on the TV</text>
+  </g>
+  <!-- servicios -->
+  <rect x="0" y="226" width="614" height="84" class="ln"/>
+  <text x="16" y="250" font-size="13" font-weight="600" letter-spacing="1">SERVICES</text>
+  <g font-size="15">
+    <text x="16" y="275">OpenSSH · Tailscale · Samba · ttyd web terminal</text>
+    <text x="16" y="299">MQTT client · mpg123 · busybox httpd · Lua 5.4 · btop</text>
+  </g>
+  <!-- alpine -->
+  <rect x="0" y="322" width="614" height="92" class="ln" fill="#E7E0D0"/>
+  <text x="16" y="349" font-size="17" font-weight="600">Alpine Linux 3.23 · armv7</text>
+  <text x="16" y="373" font-size="14.5">+ kernel modules built for the stock kernel:</text>
+  <text x="16" y="397" font-size="14.5">Wi-Fi (rt2800 · mt76 · ath9k_htc · rtl8xxx) · USB-Ethernet · TUN</text>
+  <!-- lanzador -->
+  <rect x="0" y="426" width="614" height="52" class="ln"/>
+  <text x="16" y="458" font-size="15" font-weight="600">launcher</text><text x="150" y="458" font-size="15">tiny squashfs → mounts Alpine → switch_root</text>
+  <!-- fabrica -->
+  <rect x="0" y="490" width="614" height="60" class="ln" fill="url(#hatch)"/>
+  <rect x="14" y="503" width="420" height="34" fill="#F1ECE0"/>
+  <text x="26" y="526" font-size="15" font-weight="600">boot0 · U-Boot · kernel 5.4.61</text><rect x="446" y="505" width="156" height="30" fill="#1D1C1A"/><text x="524" y="525" font-size="12" font-weight="600" fill="#F1ECE0" text-anchor="middle" letter-spacing="1">FACTORY · UNTOUCHED</text>
+  <!-- flecha de arranque -->
+  <path d="M-22 540 V20" class="ln" marker-end="url(#arr)"/>
+  <rect x="-30" y="226" width="16" height="128" fill="#F1ECE0"/><text x="-17" y="290" font-size="12" class="s" transform="rotate(-90 -17 290)" text-anchor="middle" letter-spacing="2">BOOT ORDER</text>
+</g>
+
+<line x1="46" y1="1020" x2="1554" y2="1020" class="ln"/>
+
+<!-- ===================== FIG 2: CONEXION ===================== -->
+<text x="86" y="1064" class="t" font-size="30" font-weight="700" letter-spacing="1">FIG. 2 — HOW IT CONNECTS</text>
+<text x="86" y="1090" class="m s" font-size="14">solid = cable · dashed = network · arrows = direction of data</text>
+
+<g transform="translate(0 0)">
+  <!-- TV -->
+  <rect x="86" y="1130" width="380" height="226" rx="6" class="ln" stroke-width="3"/>
+  <rect x="100" y="1144" width="352" height="198" class="thin" fill="#E7E0D0"/>
+  <!-- dashboard abstracto -->
+  <g class="thin">
+    <rect x="110" y="1154" width="108" height="56"/><rect x="224" y="1154" width="108" height="56"/><rect x="338" y="1154" width="104" height="56"/>
+    <rect x="110" y="1216" width="66" height="44"/><rect x="180" y="1216" width="66" height="44"/><rect x="250" y="1216" width="92" height="44"/><rect x="346" y="1216" width="96" height="44"/>
+    <rect x="110" y="1266" width="164" height="66"/><rect x="280" y="1266" width="162" height="66"/>
+  </g>
+  <polyline points="116,1320 132,1306 146,1312 162,1290 178,1298 194,1282 210,1300 226,1288 242,1296 266,1284" class="acc" stroke-width="2"/>
+  <polyline points="232,1196 246,1186 258,1192 270,1176 284,1184 298,1170 312,1180 326,1172" class="thin"/>
+  <text x="128" y="1190" class="t" font-size="26" font-weight="700">12.4°</text>
+  <g fill="#1D1C1A"><rect x="290" y="1278" width="70" height="5"/><rect x="290" y="1290" width="120" height="5"/><rect x="290" y="1302" width="96" height="5"/><rect x="290" y="1314" width="130" height="5"/></g>
+  <path d="M236 1356 L224 1376 H328 L316 1356" class="ln"/>
+  <text x="276" y="1404" class="m" font-size="15" font-weight="600" text-anchor="middle">TV · input HDMI 3</text>
+
+  <!-- pantalla alternativa: calendario -->
+  <g transform="translate(318 1452)">
+    <text x="0" y="-10" class="m s" font-size="11" letter-spacing="1">OR: CALENDAR · PHOTOS</text>
+    <rect x="0" y="0" width="168" height="98" class="thin" fill="#E7E0D0"/>
+    <rect x="0" y="0" width="168" height="16" fill="#1D1C1A"/>
+    <g class="thin" stroke-width=".8"><path d="M24 16 V98 M48 16 V98 M72 16 V98 M96 16 V98 M120 16 V98 M144 16 V98 M0 36.5 H168 M0 57 H168 M0 77.5 H168"/></g>
+    <rect x="72" y="36.5" width="24" height="20.5" fill="#E2531F"/>
+    <g fill="#1D1C1A"><rect x="4" y="44" width="14" height="3"/><rect x="100" y="64" width="16" height="3"/><rect x="28" y="85" width="12" height="3"/><rect x="124" y="23" width="16" height="3"/></g>
+    <g fill="#E2531F"><rect x="148" y="64" width="16" height="3"/></g>
+  </g>
+
+  <!-- Apple TV -->
+  <rect x="96" y="1450" width="180" height="46" rx="8" class="ln"/>
+  <text x="186" y="1479" class="m" font-size="14" font-weight="600" text-anchor="middle">APPLE TV · HDMI 1</text>
+  <path d="M186 1450 V1415" class="ln" marker-end="url(#arr)"/>
+  <text x="96" y="1520" class="m s" font-size="13">HDMI-CEC: HA wakes it,</text>
+  <text x="96" y="1538" class="m s" font-size="13">it turns the TV on</text>
+
+  <!-- stick -->
+  <rect x="566" y="1214" width="34" height="34" class="ln" fill="#E7E0D0"/>
+  <rect x="600" y="1200" width="170" height="62" rx="12" class="ln" stroke-width="2.5"/>
+  <text x="685" y="1238" class="m" font-size="15" font-weight="600" text-anchor="middle">GAME STICK</text>
+  <path d="M566 1231 H466" class="ln" stroke-width="3" marker-end="url(#arr)"/>
+  <text x="516" y="1220" class="m" font-size="13" text-anchor="middle">HDMI</text>
+  <text x="516" y="1252" class="m s" font-size="11" text-anchor="middle">video + voice</text>
+  <!-- tarjeta -->
+  <g transform="translate(620 1262) scale(.26 .2)"><use href="#sd" fill="url(#hatchA)" stroke="#E2531F" stroke-width="8"/></g>
+  <text x="666" y="1290" class="m a" font-size="13" font-weight="600">microSD</text>
+  <!-- energia -->
+  <path d="M756 1262 V1330" class="ln"/>
+  <rect x="704" y="1330" width="104" height="40" class="ln"/>
+  <text x="756" y="1355" class="m" font-size="13" text-anchor="middle">5 V USB-C</text>
+
+  <!-- selector USB -->
+  <path d="M770 1231 H830" class="ln" stroke-width="3"/>
+  <text x="800" y="1220" class="m" font-size="13" text-anchor="middle">USB</text>
+  <circle cx="830" cy="1231" r="5" fill="#1D1C1A"/>
+  <path d="M830 1231 L872 1170" class="ln" stroke-width="3"/>
+  <circle cx="876" cy="1164" r="5" fill="#1D1C1A"/>
+  <circle cx="876" cy="1248" r="5" class="ball" stroke-width="1.6"/>
+  <circle cx="876" cy="1330" r="5" class="ball" stroke-width="1.6"/>
+  <text x="820" y="1300" class="m s" font-size="12" text-anchor="middle" transform="rotate(-90 820 1300)" letter-spacing="1">PICK ONE</text>
+  <!-- opciones -->
+  <g class="m">
+    <rect x="890" y="1130" width="300" height="68" class="ln" stroke-width="2.5"/>
+    <text x="904" y="1157" font-size="15" font-weight="600">ESP32-C6 bridge</text>
+    <text x="904" y="1180" font-size="13">USB ↔ Wi-Fi + Bluetooth keyboard</text>
+    <rect x="1118" y="1138" width="64" height="20" fill="#1D1C1A"/><text x="1150" y="1153" font-size="11" font-weight="600" fill="#F1ECE0" text-anchor="middle">IN USE</text>
+    <rect x="890" y="1214" width="300" height="68" class="ln"/>
+    <text x="904" y="1241" font-size="15" font-weight="600">Wi-Fi dongle</text>
+    <text x="904" y="1264" font-size="13">drivers for the common USB chips</text>
+    <rect x="890" y="1298" width="300" height="68" class="ln"/>
+    <text x="904" y="1325" font-size="15" font-weight="600">USB-Ethernet</text>
+    <text x="904" y="1348" font-size="13">AX88179, ASIX, Realtek, CDC</text>
+  </g>
+  <path d="M876 1164 H890 M876 1248 H890 M876 1330 H890" class="thin"/>
+  <path d="M1190 1164 H1230 M1190 1248 H1230 M1190 1332 H1230" class="dash"/>
+
+  <!-- red de casa -->
+  <path d="M1230 1120 V1500" class="ln" stroke-width="4"/>
+  <text x="1222" y="1520" class="m" font-size="13" font-weight="600" text-anchor="middle">HOME LAN</text>
+
+  <!-- Home Assistant -->
+  <rect x="1270" y="1120" width="244" height="134" class="ln" stroke-width="2.5" fill="#E7E0D0"/>
+  <text x="1284" y="1150" class="m" font-size="16" font-weight="600">HOME ASSISTANT</text>
+  <text x="1284" y="1176" class="m" font-size="12.5">data: template API · 30 s</text>
+  <text x="1284" y="1198" class="m a" font-size="12.5" font-weight="600">MQTT device · ~40 entities</text>
+  <text x="1284" y="1220" class="m" font-size="12.5">→ messages · photos · voice</text>
+  <text x="1284" y="1242" class="m" font-size="12.5">← state · buttons · switches</text>
+  <path d="M1270 1176 H1230" class="dash"/>
+  <!-- tailnet -->
+  <rect x="1262" y="1270" width="260" height="230" rx="26" class="dash" stroke="#E2531F" stroke-width="2"/>
+  <text x="1284" y="1300" class="m a" font-size="15" font-weight="600">TAILSCALE · anywhere</text>
+  <g class="m" font-size="13.5">
+    <text x="1284" y="1328">▸ SSH</text>
+    <text x="1284" y="1352">▸ web screen</text>
+    <text x="1300" y="1370" class="s" font-size="12">live mirror of the TV</text>
+    <text x="1284" y="1398">▸ web terminal</text>
+    <text x="1284" y="1426">▸ shared folder (SMB)</text>
+    <text x="1300" y="1444" class="s" font-size="12">drop photos · up to 10 GB</text>
+    <text x="1284" y="1478">▸ exit node, if needed</text>
+  </g>
+  <path d="M1262 1380 H1230" class="dash"/>
+</g>
+
+<!-- flujo de un mensaje -->
+<g transform="translate(520 1440)" class="m">
+  <text x="0" y="0" font-size="13" font-weight="600" letter-spacing="1">AN IMPORTANT MESSAGE, STEP BY STEP</text>
+  <g font-size="13.5">
+    <text x="0" y="28"><tspan class="a" font-weight="600">01</tspan>  HA sends it over MQTT</text>
+    <text x="0" y="52"><tspan class="a" font-weight="600">02</tspan>  TV jumps to HDMI 3 (even if it was off)</text>
+    <text x="0" y="76"><tspan class="a" font-weight="600">03</tspan>  stick confirms it's on screen</text>
+    <text x="0" y="100"><tspan class="a" font-weight="600">04</tspan>  TV goes back to what you were watching</text>
+  </g>
+</g>
+
+<line x1="46" y1="1580" x2="1554" y2="1580" class="ln"/>
+
+<!-- ===================== FIG 3: CAMBIAR LA TARJETA ===================== -->
+<text x="86" y="1624" class="t" font-size="30" font-weight="700" letter-spacing="1">FIG. 3 — SWAP THE CARD</text>
+<text x="86" y="1650" class="m s" font-size="14">the stick has no internal memory: it boots only from the microSD</text>
+
+<g transform="translate(130 1680)">
+  <use href="#sd" fill="url(#hatch)" stroke="#1D1C1A" stroke-width="2.5"/>
+  <rect x="14" y="70" width="122" height="64" fill="#F1ECE0" stroke="#1D1C1A" stroke-width="1.2"/>
+  <text x="75" y="100" class="t" font-size="30" font-weight="700" text-anchor="middle">A</text>
+  <text x="75" y="124" class="m" font-size="12" font-weight="600" text-anchor="middle">FACTORY</text>
+  <g class="thin"><path d="M18 14 v26 M34 14 v26 M50 14 v26 M66 14 v26 M82 14 v26"/></g>
+  <text x="75" y="232" class="m" font-size="14" text-anchor="middle">retro games,</text>
+  <text x="75" y="252" class="m" font-size="14" text-anchor="middle">as it was sold</text>
+</g>
+<path d="M310 1760 H420" class="ln" stroke-width="2.5" marker-end="url(#arr)" marker-start="url(#arr)"/>
+<text x="365" y="1745" class="m" font-size="12" text-anchor="middle" letter-spacing="1">SECONDS</text>
+<g transform="translate(440 1680)">
+  <use href="#sd" fill="url(#hatchA)" stroke="#E2531F" stroke-width="3"/>
+  <rect x="14" y="70" width="122" height="64" fill="#F1ECE0" stroke="#E2531F" stroke-width="1.5"/>
+  <text x="75" y="100" class="t a" font-size="30" font-weight="700" text-anchor="middle">B</text>
+  <text x="75" y="124" class="m a" font-size="12" font-weight="600" text-anchor="middle">ALPINE</text>
+  <g class="acc" stroke-width="1.2"><path d="M18 14 v26 M34 14 v26 M50 14 v26 M66 14 v26 M82 14 v26"/></g>
+  <text x="75" y="232" class="m" font-size="14" text-anchor="middle">home panel,</text>
+  <text x="75" y="252" class="m" font-size="14" text-anchor="middle">Linux, network</text>
+</g>
+<g class="m" font-size="14.5" transform="translate(640 1700)">
+  <text x="0" y="0">Nothing is flashed</text>
+  <text x="0" y="22">to the board.</text>
+  <text x="0" y="56">Keep the original</text>
+  <text x="0" y="78">card: put it back</text>
+  <text x="0" y="100">and it's a game</text>
+  <text x="0" y="122">console again.</text>
+  <text x="0" y="160" class="s">One card per job:</text>
+  <text x="0" y="182" class="s">panel · console · lab</text>
+</g>
+
+<!-- ===================== FIG 4: USOS ===================== -->
+<line x1="866" y1="1600" x2="866" y2="1960" class="thin"/>
+<text x="900" y="1624" class="t" font-size="30" font-weight="700" letter-spacing="1">FIG. 4 — WHAT IT'S FOR</text>
+<text x="900" y="1650" class="m s" font-size="14">■ in use at home    □ also possible with the same card</text>
+<g class="m" font-size="15" transform="translate(900 1684)">
+  <g>
+    <rect x="0" y="-13" width="14" height="14" fill="#1D1C1A"/><text x="26" y="0">home + homelab dashboard on the TV</text>
+    <rect x="0" y="13" width="14" height="14" fill="#1D1C1A"/><text x="26" y="26">family calendar with themes, one per person</text>
+    <rect x="0" y="39" width="14" height="14" fill="#1D1C1A"/><text x="26" y="52">digital photo frame from the shared folder</text>
+    <rect x="0" y="65" width="14" height="14" fill="#1D1C1A"/><text x="26" y="78">notices, alerts and voice from Home Assistant</text>
+    <rect x="0" y="91" width="14" height="14" fill="#1D1C1A"/><text x="26" y="104">a Home Assistant device, controlled over MQTT</text>
+    <rect x="0" y="117" width="14" height="14" fill="#1D1C1A"/><text x="26" y="130">always-on Linux node on the tailnet</text>
+    <rect x="0" y="143" width="14" height="14" fill="#1D1C1A"/><text x="26" y="156">network share for photos and files</text>
+  </g>
+  <line x1="0" y1="176" x2="614" y2="176" class="thin" stroke-dasharray="2 4"/>
+  <g>
+    <rect x="0.75" y="185.75" width="12.5" height="12.5" class="thin" stroke-width="1.5"/><text x="26" y="198">kiosk / signage: menus, schedules, queues</text>
+    <rect x="0.75" y="211.75" width="12.5" height="12.5" class="thin" stroke-width="1.5"/><text x="26" y="224">dashboard for anything with an API</text>
+    <rect x="0.75" y="237.75" width="12.5" height="12.5" class="thin" stroke-width="1.5"/><text x="26" y="250">server-rack status screen</text>
+    <rect x="0.75" y="263.75" width="12.5" height="12.5" class="thin" stroke-width="1.5"/><text x="26" y="276">notification screen: doorbell, laundry, printer</text>
+  </g>
+</g>
+
+<line x1="46" y1="1980" x2="1554" y2="1980" class="ln"/>
+
+<!-- ===================== PIE: CIFRAS + ROTULO ===================== -->
+<g transform="translate(86 1996)">
+  <g class="t" font-weight="700" font-size="40">
+    <text x="0" y="40">2.4 %</text>
+    <text x="236" y="40">160 MB</text>
+    <text x="478" y="40">10 GB</text>
+    <text x="680" y="40" class="a">0</text>
+  </g>
+  <g class="m s" font-size="12.5">
+    <text x="100" y="22">CPU for the</text><text x="100" y="38">whole panel</text>
+    <text x="364" y="22">RAM free</text><text x="364" y="38">of 256</text>
+    <text x="582" y="22">shared</text><text x="582" y="38">folder</text>
+    <text x="712" y="22">changes to</text><text x="712" y="38">the hardware</text>
+  </g>
+</g>
+<!-- rotulo -->
+<g transform="translate(1110 1980)" class="m">
+  <rect x="0" y="0" width="444" height="74" class="ln"/>
+  <path d="M0 37 H444 M176 0 V74 M316 0 V37" class="thin"/>
+  <text x="10" y="15" font-size="10" class="s">PROJECT</text><text x="10" y="31" font-size="14" font-weight="600">game-stick-alpine</text>
+  <text x="186" y="15" font-size="10" class="s">DWG NO.</text><text x="186" y="31" font-size="14" font-weight="600">GSA-01</text>
+  <text x="326" y="15" font-size="10" class="s">REV · DATE</text><text x="326" y="31" font-size="14" font-weight="600">C · 2026-11</text>
+  <text x="10" y="52" font-size="10" class="s">SCALE</text><text x="10" y="68" font-size="14" font-weight="600">NTS</text>
+  <text x="186" y="52" font-size="10" class="s">STACK</text><text x="186" y="68" font-size="14" font-weight="600">Alpine · Tailscale · MQTT</text>
+</g>
+</svg>
+</body>
+</html>

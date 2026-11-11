@@ -1,0 +1,6 @@
+# nunca subir: imagenes de SD (firmware del fabricante), claves y binarios
+*.img
+*.img.sha256
+*.bin
+*.tgz
+wifi.cfg
