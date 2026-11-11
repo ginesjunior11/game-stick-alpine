@@ -74,7 +74,7 @@ There's no code to download here. Instead, **[GUIDE.md](GUIDE.md)** walks you th
 
 ### What you need
 
-- A **Game Stick Lite 4K with an Allwinner chip** (marked MG99 or H133). ⚠️ A HiSilicon version looks the same outside and won't work.
+- A **Game Stick Lite 4K with an Allwinner chip** (marked MG99 or H133). A HiSilicon version looks the same outside and won't work.
 - A **second microSD** (32 GB+) and a card reader.
 - A **PC or Mac** (Windows with WSL2, Linux, or macOS with Docker / a Linux VM).
 - An **AI coding assistant** that can run commands: Claude Code, Codex or similar.
